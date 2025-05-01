@@ -18,13 +18,13 @@ with the exit code of the real command.
 ## Example
 Dockerfile
 ```
-COPY --from=hasnat/docker-stats-on-exit-shim /docker-stats-on-exit-shim .
+COPY --from=hasnat/docker-stats-on-exit-shim:exitgo2 /docker-stats-on-exit-shim .
 ENTRYPOINT ["/docker-stats-on-exit-shim"]
 CMD ["sleep", "1"]
 ```
 Example Run
 ```bash
-$ docker run --rm -ti hasnat/docker-stats-on-exit-shim:exitgo /bin/sleep 1
+$ docker run --rm -ti hasnat/docker-stats-on-exit-shim:exitgo2 /bin/sleep 1
 ```
 Output example
 ```json
