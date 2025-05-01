@@ -21,10 +21,22 @@ for file in /sys/fs/cgroup/**; do
   while read -r line ; do
    if [[ $(echo "$line" | wc -w) == 2 ]]; then
 
-    CONTENT=$(echo $line | awk '{$1="";sub(/^ /, ""); print $0}')
-    echo $NO_NEWLINE "\"$FILENAME.$(echo $line | awk 'NR==1 {print $1}')\":\"$CONTENT\"," >> $STATS_OUTPUT_FILE ;
+    CONTENT=$(echo $line | awk '{$1="";sub(/^ /, ""); print $0}'| sed -E 's#\s*"\s*([^"]+)\s*"\s*#\1#')
+
+    if [ -n "$CONTENT" ] && [ "$CONTENT" -eq "$CONTENT" ] 2>/dev/null; then
+      CONTENT_STR="$CONTENT"
+    else
+      CONTENT_STR="\"$CONTENT\""
+    fi
+    echo $NO_NEWLINE "\"$FILENAME.$(echo $line | awk 'NR==1 {print $1}')\":$CONTENT_STR," >> $STATS_OUTPUT_FILE ;
   else
-    echo $NO_NEWLINE "\"$FILENAME\":\"$line\"," >> $STATS_OUTPUT_FILE ;
+    CONTENT=$(echo $line | sed -E 's#\s*"\s*([^"]+)\s*"\s*#\1#')
+     if [ -n "$CONTENT" ] && [ "$CONTENT" -eq "$CONTENT" ] 2>/dev/null; then
+          CONTENT_STR="$CONTENT"
+        else
+          CONTENT_STR="\"$CONTENT\""
+        fi
+    echo $NO_NEWLINE "\"$FILENAME\":$CONTENT_STR," >> $STATS_OUTPUT_FILE ;
   fi
 
   done < <(echo "$FILECONTENT")
