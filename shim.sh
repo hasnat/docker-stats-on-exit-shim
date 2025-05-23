@@ -13,7 +13,7 @@ done
 echo $NO_NEWLINE $STATS_OUTPUT_PREFIX >> $STATS_OUTPUT_FILE
 echo $NO_NEWLINE "{" >> $STATS_OUTPUT_FILE
 
-for file in /proc/stat /sys/fs/cgroup/**; do
+for file in /proc/1/stat /sys/fs/cgroup/**; do
 
   FILENAME=$(basename $file)
   FILECONTENT="$(cat $file 2>/dev/null || echo "")"
